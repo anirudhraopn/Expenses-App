@@ -29,19 +29,7 @@ class MyHome extends StatefulWidget {
 }
 
 class _MyHomeState extends State<MyHome> {
-  final List<Transaction> _userTransactions = [
-    // Transaction(
-    //   title: 'Agarbatti',
-    //   amount: 200.00,
-    //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //   title: 'Milk',
-    //   amount: 66.00,
-    //   date: DateTime.now(),
-    //   id
-    // ),
-  ];
+  final List<Transaction> _userTransactions = [];
   void _addTransaction(
     String txTitle,
     double txAmount,
