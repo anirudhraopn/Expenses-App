@@ -1,5 +1,6 @@
 //import 'dart:io';
 
+import './transaction_items.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -30,7 +31,7 @@ class TransactionList extends StatelessWidget {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  Text(
+                  const Text(
                     'No transactions!!!',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -38,7 +39,7 @@ class TransactionList extends StatelessWidget {
                       //fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
+                  const Text(
                     'Add transaction to view',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -52,57 +53,8 @@ class TransactionList extends StatelessWidget {
           )
         : ListView.builder(
             itemBuilder: (ctx, index) {
-              return Card(
-                margin: EdgeInsets.symmetric(vertical: 8, horizontal: 3),
-                elevation: 5,
-                child: ListTile(
-                  leading: CircleAvatar(
-                    radius: 40,
-                    child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: FittedBox(
-                        child: Text('₹${transactions[index].amount}'),
-                      ),
-                    ),
-                  ),
-                  title: Text(
-                    transactions[index].title,
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(
-                    DateFormat.yMMMd().format(transactions[index].date),
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
-                  trailing: MediaQuery.of(context).size.width > 460
-                      ? TextButton.icon(
-                          onPressed: () {
-                            deleteTx(transactions[index].id);
-                          },
-                          icon: Icon(
-                            Icons.delete,
-                            color: Theme.of(context).errorColor,
-                          ),
-                          label: Text(
-                            'Delete',
-                            style: TextStyle(
-                              color: Theme.of(context).errorColor,
-                            ),
-                          ),
-                        )
-                      : IconButton(
-                          onPressed: () {
-                            deleteTx(transactions[index].id);
-                          },
-                          color: Theme.of(context).errorColor,
-                          tooltip: 'Delete',
-                          icon: Icon(
-                            Icons.delete,
-                          ),
-                        ),
-                ),
-              );
+              return TransactionItems(
+                  transaction: transactions[index], deleteTx: deleteTx);
             },
             itemCount: transactions.length,
           );

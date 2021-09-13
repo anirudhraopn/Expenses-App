@@ -18,17 +18,17 @@ void main() {
   //     DeviceOrientation.portraitDown,
   //   ],
   // );
-  runApp(MyAp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  // const MyApp({ Key? key }) : super(key: key);
+class MyHome extends StatefulWidget {
+  // const MyHome({ Key? key }) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  _MyHomeState createState() => _MyHomeState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyHomeState extends State<MyHome> {
   final List<Transaction> _userTransactions = [
     // Transaction(
     //   title: 'Agarbatti',
@@ -63,7 +63,7 @@ class _MyAppState extends State<MyApp> {
       context: ctx,
       //enableDrag: true,
       isScrollControlled: true,
-      builder: (bctx) {
+      builder: (_) {
         return NewTransaction(_addTransaction);
       },
     );
@@ -87,13 +87,54 @@ class _MyAppState extends State<MyApp> {
 
   bool _showChart = false;
 
+  List<Widget> _buildLandscape(AppBar appBar, Widget txList) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('Show Chart'),
+          Switch.adaptive(
+              activeColor: Theme.of(context).primaryColor,
+              value: _showChart,
+              onChanged: (val) {
+                setState(() {
+                  _showChart = val;
+                });
+              }),
+        ],
+      ),
+      _showChart
+          ? Container(
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height -
+                      MediaQuery.of(context).padding.top) *
+                  0.7,
+              child: Chart(_recentTransaction),
+            )
+          : txList
+    ];
+  }
+
+  List<Widget> _buildPortrait(AppBar appBar, Widget txList) {
+    return [
+      Container(
+        height: (MediaQuery.of(context).size.height -
+                appBar.preferredSize.height -
+                MediaQuery.of(context).padding.top) *
+            0.3,
+        child: Chart(_recentTransaction),
+      ),
+      txList,
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     final dynamic appBar = Platform.isIOS
         ? CupertinoNavigationBar(
-            middle: Text('Expenses App'),
+            middle: const Text('Expenses App'),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -136,45 +177,17 @@ class _MyAppState extends State<MyApp> {
           0.7,
       child: TransactionList(_userTransactions, _deleteTransaction),
     );
-    final pageBody = SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          if (isLandscape)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Show Chart'),
-                Switch.adaptive(
-                    activeColor: Theme.of(context).primaryColor,
-                    value: _showChart,
-                    onChanged: (val) {
-                      setState(() {
-                        _showChart = val;
-                      });
-                    }),
-              ],
-            ),
-          if (!isLandscape)
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      appBar.preferredSize.height -
-                      MediaQuery.of(context).padding.top) *
-                  0.3,
-              child: Chart(_recentTransaction),
-            ),
-          if (!isLandscape) txList,
-          if (isLandscape)
-            _showChart
-                ? Container(
-                    height: (MediaQuery.of(context).size.height -
-                            appBar.preferredSize.height -
-                            MediaQuery.of(context).padding.top) *
-                        0.7,
-                    child: Chart(_recentTransaction),
-                  )
-                : txList
-        ],
+    final pageBody = SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            if (isLandscape) ..._buildLandscape(appBar, txList),
+            if (!isLandscape) ..._buildPortrait(appBar, txList),
+            if (!isLandscape) ..._buildPortrait(appBar, txList),
+            if (isLandscape) ..._buildLandscape(appBar, txList),
+          ],
+        ),
       ),
     );
     return MaterialApp(
@@ -192,7 +205,7 @@ class _MyAppState extends State<MyApp> {
                   ? Container()
                   : FloatingActionButton(
                       backgroundColor: Colors.teal,
-                      child: Icon(
+                      child: const Icon(
                         Icons.arrow_upward,
                         size: 20,
                       ),
@@ -213,12 +226,12 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class MyAp extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext ctx) {
     return MaterialApp(
       title: 'Expenses App',
-      home: MyApp(),
+      home: MyHome(),
       theme: ThemeData(
         primarySwatch: Colors.teal,
         accentColor: Colors.white,
