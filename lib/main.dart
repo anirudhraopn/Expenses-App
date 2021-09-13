@@ -172,13 +172,14 @@ class _MyHomeState extends State<MyHome> {
           children: [
             if (isLandscape) ..._buildLandscape(appBar, txList),
             if (!isLandscape) ..._buildPortrait(appBar, txList),
-            if (!isLandscape) ..._buildPortrait(appBar, txList),
-            if (isLandscape) ..._buildLandscape(appBar, txList),
+            //if (!isLandscape) ..._buildPortrait(appBar, txList),
+            //if (isLandscape) ..._buildLandscape(appBar, txList),
           ],
         ),
       ),
     );
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Expenses App',
       home: Platform.isIOS
           ? CupertinoPageScaffold(
@@ -218,6 +219,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext ctx) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Expenses App',
       home: MyHome(),
       theme: ThemeData(
