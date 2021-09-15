@@ -156,7 +156,7 @@ class _MyHomeState extends State<MyHome> {
                 tooltip: 'Add Transaction',
               ),
             ],
-            backgroundColor: Colors.teal,
+            backgroundColor: Theme.of(context).primaryColor,
           );
     final txList = Container(
       height: (MediaQuery.of(context).size.height -
@@ -178,40 +178,31 @@ class _MyHomeState extends State<MyHome> {
         ),
       ),
     );
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Expenses App',
-      home: Platform.isIOS
-          ? CupertinoPageScaffold(
-              child: pageBody,
-              navigationBar: appBar,
-            )
-          : Scaffold(
-              appBar: appBar,
-              backgroundColor: Colors.teal[50],
-              body: pageBody,
-              floatingActionButton: Platform.isIOS
-                  ? Container()
-                  : FloatingActionButton(
-                      backgroundColor: Colors.teal,
-                      child: const Icon(
-                        Icons.arrow_upward,
-                        size: 20,
-                      ),
-                      tooltip: 'Add Transaction',
-                      onPressed: () {
-                        _startAddingTx(context);
-                      },
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            child: pageBody,
+            navigationBar: appBar,
+          )
+        : Scaffold(
+            appBar: appBar,
+            //backgroundColor: Theme.of(context).primaryColorLight,
+            body: pageBody,
+            floatingActionButton: Platform.isIOS
+                ? Container()
+                : FloatingActionButton(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    child: const Icon(
+                      Icons.arrow_upward,
+                      size: 20,
                     ),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerFloat,
-            ),
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-        accentColor: Colors.white,
-        fontFamily: GoogleFonts.openSans().fontFamily,
-      ),
-    );
+                    tooltip: 'Add Transaction',
+                    onPressed: () {
+                      _startAddingTx(context);
+                    },
+                  ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+          );
   }
 }
 
@@ -225,6 +216,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
         accentColor: Colors.white,
+        fontFamily: GoogleFonts.openSans().fontFamily,
+        scaffoldBackgroundColor: Colors.teal[50],
       ),
     );
   }
